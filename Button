@@ -1,0 +1,53 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class randomise : MonoBehaviour
+{
+    //Scripts
+    private LocationManager LM;
+    private WeatherManager WM;
+
+    //Asset arrays
+    public string[] conditionNames;
+    public Sprite[] weatherIcons;
+    public Sprite[] backgrounds;
+
+    //Unity UI elements
+    public Text conditionText;
+    public Image weatherImage;
+    public Image backgroundImage;
+    public Text date;
+    public Text location;
+    public Text temperature;
+
+    //Awake
+    private void Awake()
+    {
+        LM = this.GetComponent<LocationManager>();
+        WM = this.GetComponent<WeatherManager>();
+    }
+
+    //Button click
+    public void buttonClick()
+    {
+        changeState(1);
+        date.text = System.DateTime.Now.ToString("d MMM yyyy");
+        StartCoroutine(LM.GetGPS());
+    }
+
+    //Change state
+    public void changeState(int condition)
+    {
+        conditionText.text = conditionNames[condition];
+        weatherImage.sprite = weatherIcons[condition];
+        backgroundImage.sprite = backgrounds[condition];
+    }
+
+    //Show GPS Coords
+    public void showGPSCords(float latitude, float longitude)
+    {
+        StartCoroutine(WM.GetWether(latitude, longitude));
+    }
+}
