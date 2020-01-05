@@ -1,0 +1,38 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using LitJson;
+
+public class WeatherManager : MonoBehaviour
+{
+    private randomise RD;
+    private string url = "https://api.openweathermap.org/data/2.5/weather?";
+    private string key = "&units=metric&appid=048ecf0dfdce4973c22d21d2ad62bccd";
+
+    private void Awake()
+    {
+        RD = this.GetComponent<randomise>();
+    }
+
+    public IEnumerator GetWether(float latitude, float longitude)
+    {
+        string completeURL = url + "lat=" + latitude.ToString() + "&lon=" + longitude.ToString() + key;
+
+        WWW weatherRequest = new WWW(completeURL);
+
+        yield return weatherRequest;
+
+        ParseWeatherRequest(weatherRequest.text);
+    }
+
+    private void ParseWeatherRequest(string s)
+    {
+        JsonData data = JsonMapper.ToObject(s);
+
+        Debug.Log(data["name"].ToString());
+        Debug.Log(data["main"]["temp"].ToString());
+
+        RD.location.text = data["name"].ToString();
+        RD.temperature.text = Mathf.Round(float.Parse(data["main"]["temp"].ToString())).ToString() + "°";
+    }
+}
