@@ -1,0 +1,23 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class audioControl : MonoBehaviour
+{
+    public AudioSource mainAudio;
+    public Slider audioVolume;
+
+    void Start()
+    {
+        mainAudio = GameObject.Find("AppManager").GetComponent<AudioSource>();
+
+    }
+    public void OnSliderChange()
+    {
+        PlayerPrefs.SetFloat("AudioVolume", audioVolume.value);
+        mainAudio.volume = PlayerPrefs.GetFloat("AudioVolume", 1f);
+
+        Debug.Log(audioVolume.value);
+    }
+}
