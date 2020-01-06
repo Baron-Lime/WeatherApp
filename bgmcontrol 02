@@ -1,0 +1,38 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class audioControl : MonoBehaviour
+{
+    public AudioSource mainAudio;
+    public Slider audioVolume;
+    // Start is called before the first frame update
+
+    public float bgVolume;
+    public float yxVolume;
+    void Start()
+    {
+        mainAudio = GameObject.Find("AppManager").GetComponent<AudioSource>();
+
+        bgVolume = getBgVolume();
+        mainAudio.volume = bgVolume;
+        audioVolume.value = getBgVolume();
+    }
+    public void setBgVolume(float f)
+    {
+        PlayerPrefs.GetFloat("music", f);
+    }
+    private float getBgVolume()
+    {
+        return PlayerPrefs.GetFloat("music", 1f);
+    }
+
+    public void changeVolume_music()
+    {
+        bgVolume = audioVolume.value;
+        mainAudio.volume = audioVolume.value;
+        setBgVolume(audioVolume.value);
+    }
+
+}
